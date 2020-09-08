@@ -4,8 +4,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
+import android.view.View;
 
 public class CakeView extends SurfaceView {
 
@@ -18,6 +21,10 @@ public class CakeView extends SurfaceView {
     Paint outerFlamePaint = new Paint();
     Paint innerFlamePaint = new Paint();
     Paint wickPaint = new Paint();
+
+    Paint locationPaint = new Paint();
+    Paint balloonPaint = new Paint();
+    Paint stringPaint = new Paint();
 
     /* These constants define the dimensions of the cake.  While defining constants for things
         like this is good practice, we could be calculating these better by detecting
@@ -35,8 +42,6 @@ public class CakeView extends SurfaceView {
     public static final float wickWidth = 6.0f;
     public static final float outerFlameRadius = 30.0f;
     public static final float innerFlameRadius = 15.0f;
-
-
 
     /**
      * ctor must be overridden here as per standard Java inheritance practice.  We need it
@@ -63,8 +68,12 @@ public class CakeView extends SurfaceView {
         wickPaint.setColor(Color.BLACK);
         wickPaint.setStyle(Paint.Style.FILL);
 
-        setBackgroundColor(Color.WHITE);  //better than black default
+        locationPaint.setTextSize(32);
+        locationPaint.setColor(Color.RED);
+        balloonPaint.setColor(Color.BLUE);
+        stringPaint.setColor(Color.RED);
 
+        setBackgroundColor(Color.WHITE);  //better than black default
     }
 
     /**
@@ -139,9 +148,42 @@ public class CakeView extends SurfaceView {
             }
         }
 
+        // person A changes
+        /*if(this.cakeModel.xCoord > -1) {
+            canvas.drawText("(" + this.cakeModel.xCoord + ",  " + this.cakeModel.yCoord + ")", 1500, 650, locationPaint);
+        }*/
+
+        // person B changes
+        if(this.cakeModel.xCoord > -1) {
+            int balloonWidth = 120;
+            int balloonHeight = 170;
+            canvas.drawOval(this.cakeModel.xCoord-balloonWidth/2, this.cakeModel.yCoord-balloonHeight/2,this.cakeModel.xCoord+balloonWidth/2,this.cakeModel.yCoord+balloonHeight/2, balloonPaint);
+            canvas.drawLine(this.cakeModel.xCoord, this.cakeModel.yCoord+balloonHeight/2, this.cakeModel.xCoord, this.cakeModel.yCoord+2*balloonHeight, stringPaint);
+
+
+            /* // just practicing drawing ovals
+            RectF oval = new RectF(0,0,150,150);
+            canvas.drawOval(oval, balloonPaint);
+
+            RectF oval2 = new RectF(75,75,150,150);
+            canvas.drawOval(oval2, stringPaint);*/
+        }
+
+        // person C changes
+       /* if(this.cakeModel.xCoord > -1) {
+            int squareWidth = 100;
+            //top left square
+            canvas.drawRect(this.cakeModel.xCoord - squareWidth / 2, this.cakeModel.yCoord - squareWidth / 2, this.cakeModel.xCoord, this.cakeModel.yCoord, balloonPaint);
+            //top right square
+            canvas.drawRect(this.cakeModel.xCoord, this.cakeModel.yCoord - squareWidth/2, this.cakeModel.xCoord+squareWidth/2, this.cakeModel.yCoord, stringPaint);
+            //bottom left square
+            canvas.drawRect(this.cakeModel.xCoord - squareWidth / 2, this.cakeModel.yCoord, this.cakeModel.xCoord, this.cakeModel.yCoord+squareWidth/2, stringPaint);
+            //bottom right square
+            canvas.drawRect(this.cakeModel.xCoord, this.cakeModel.yCoord, this.cakeModel.xCoord+squareWidth/2, this.cakeModel.yCoord+squareWidth/2, balloonPaint);
+
+        }*/
     }//onDraw
 
     public CakeModel getCakeModel() { return this.cakeModel; }
-
 }//class CakeView
 
